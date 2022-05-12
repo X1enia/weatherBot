@@ -1,4 +1,4 @@
-package com.example.wservice.dto;
+package com.example.kafkacommon.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -11,7 +11,13 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 @Data
 @JsonInclude(NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ForecastFiveDaysDto {
+public class ForecastFiveDaysDto implements AbstractDto {
     private List<WeatherDto> list;
+    private City city;
 
+    @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class City {
+        private String name;
+    }
 }
