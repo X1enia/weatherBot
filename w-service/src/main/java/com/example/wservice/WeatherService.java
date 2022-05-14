@@ -1,8 +1,10 @@
 package com.example.wservice;
 
-import com.example.wservice.dto.ForecastFiveDaysDto;
-import com.example.wservice.dto.ResponseWeatherDto;
-import com.example.wservice.dto.WeatherDto;
+import com.example.kafkacommon.dto.ForecastFiveDaysDto;
+import com.example.kafkacommon.dto.GetWeatherDto;
+import com.example.kafkacommon.dto.ResponseWeatherDto;
+import com.example.kafkacommon.dto.WeatherDto;
+import com.example.wservice.kafka.WeatherProducer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -33,12 +35,14 @@ public class WeatherService {
         this.producer = producer;
     }
 
-    public ForecastResponse getForecastOneDay(String cityName) throws MalformedURLException {
+    public ForecastResponse getForecastOneDay(GetWeatherDto message) throws MalformedURLException {
+        String cityName = message.getCityName();
         URL weatherUrl = new URL(String.format(apiUrlOneDay, cityName, apiToken));
         try (InputStream is = (weatherUrl.openStream())) {
             WeatherDto dto = objectMapper.readValue(is, WeatherDto.class);
             ResponseWeatherDto response = new ResponseWeatherDto();
             response.append(convertWeatherToString(dto, dto.getName()));
+            response.setUserId(message.getTelegramId());
             producer.sendMessage(response);
             return ForecastResponse.builder()
                     .errorCode(0)
@@ -53,12 +57,14 @@ public class WeatherService {
         }
     }
 
-    public ForecastResponse getForecastFiveDays(String cityName) throws MalformedURLException {
+    public ForecastResponse getForecastFiveDays(GetWeatherDto message) throws MalformedURLException {
+        String cityName = message.getCityName();
         URL weatherUrl = new URL(String.format(apiUrlFiveDay, cityName, apiToken));
         try (InputStream is = (weatherUrl.openStream())) {
             ForecastFiveDaysDto dto = objectMapper.readValue(is, ForecastFiveDaysDto.class);
             ResponseWeatherDto response = new ResponseWeatherDto();
             dto.getList().forEach(weatherDto -> response.append(convertWeatherToString(weatherDto, dto.getCity().getName())));
+            response.setUserId(message.getTelegramId());
             producer.sendMessage(response);
             return ForecastResponse.builder()
                     .errorCode(0)
