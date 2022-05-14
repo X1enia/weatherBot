@@ -1,4 +1,4 @@
-package com.example.wservice;
+package com.example.wservice.kafka;
 
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,15 +13,6 @@ public class KafkaConfig {
 
     @Bean
     public NewTopic weatherTopic(@Value("${spring.kafka.topic.weather}") String topic) {
-        return TopicBuilder.name(topic)
-                .partitions(1)
-                .replicas(1)
-                .compact()
-                .build();
-    }
-
-    @Bean
-    public NewTopic telegramTopic(@Value("${spring.kafka.topic.telegram}") String topic) {
         return TopicBuilder.name(topic)
                 .partitions(1)
                 .replicas(1)

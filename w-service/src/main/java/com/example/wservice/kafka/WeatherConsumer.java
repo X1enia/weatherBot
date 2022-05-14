@@ -1,14 +1,17 @@
-package com.example.wservice;
+package com.example.wservice.kafka;
 
 import com.example.kafkacommon.dto.GetWeatherDto;
+import com.example.wservice.WeatherService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import java.net.MalformedURLException;
 
+@Slf4j
 @Component
-@KafkaListener(topics = "weather.service")
+@KafkaListener(topics = "telegram.service")
 public class WeatherConsumer {
     private final WeatherService service;
 
@@ -18,13 +21,13 @@ public class WeatherConsumer {
 
     @KafkaHandler
     public void listener(GetWeatherDto message) throws MalformedURLException {
-        System.out.printf("Recieved message: %s%n", message);
+        log.info(String.format("Received message: %s", message));
         switch (message.getForecastType()) {
             case DAY:
-                service.getForecastOneDay(message.getCityName());
+                service.getForecastOneDay(message);
                 break;
             case FIVE_DAYS:
-                service.getForecastFiveDays(message.getCityName());
+                service.getForecastFiveDays(message);
                 break;
         }
     }

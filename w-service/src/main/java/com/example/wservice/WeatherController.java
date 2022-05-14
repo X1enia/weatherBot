@@ -1,9 +1,10 @@
 package com.example.wservice;
 
+import com.example.kafkacommon.dto.GetWeatherDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.MalformedURLException;
@@ -17,13 +18,13 @@ public class WeatherController {
         this.service = service;
     }
 
-    @GetMapping(value = "/weather={cityName}")
-    public ResponseEntity<ForecastResponse> getForecastByCityName(@PathVariable String cityName) throws MalformedURLException {
-        return new ResponseEntity<>(service.getForecastOneDay(cityName), HttpStatus.OK);
+    @GetMapping(value = "/weather")
+    public ResponseEntity<ForecastResponse> getForecastByCityName(@RequestBody GetWeatherDto dto) throws MalformedURLException {
+        return new ResponseEntity<>(service.getForecastOneDay(dto), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/weather5={cityName}")
-    public ResponseEntity<ForecastResponse> getForecastFiveDaysByCityName(@PathVariable String cityName) throws MalformedURLException {
-        return new ResponseEntity<>(service.getForecastFiveDays(cityName), HttpStatus.OK);
+    @GetMapping(value = "/weather5")
+    public ResponseEntity<ForecastResponse> getForecastFiveDaysByCityName(@RequestBody GetWeatherDto dto) throws MalformedURLException {
+        return new ResponseEntity<>(service.getForecastFiveDays(dto), HttpStatus.OK);
     }
 }

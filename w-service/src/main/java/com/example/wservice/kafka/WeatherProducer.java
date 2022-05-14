@@ -1,7 +1,7 @@
-package com.example.wservice;
+package com.example.wservice.kafka;
 
 
-import com.example.wservice.dto.AbstractDto;
+import com.example.kafkacommon.dto.AbstractDto;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -16,7 +16,7 @@ public class WeatherProducer {
     private final KafkaTemplate<String, AbstractDto> kafkaTemplate;
 
     public WeatherProducer(KafkaTemplate<String, AbstractDto> kafkaTemplate,
-                           @Value("${spring.kafka.topic.telegram}") String telegramTopic) {
+                           @Value("${spring.kafka.topic.weather}") String telegramTopic) {
         this.kafkaTemplate = kafkaTemplate;
         this.telegramTopic = telegramTopic;
     }
