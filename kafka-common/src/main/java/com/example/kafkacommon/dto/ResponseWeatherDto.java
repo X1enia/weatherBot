@@ -9,9 +9,9 @@ public class ResponseWeatherDto implements AbstractDto {
 
     public void append(String msg) {
         if (message == null) {
-            message = msg;
+            message = msg + "\n";
         } else {
-            message += msg;
+            message += msg + "\n";
         }
     }
 }
