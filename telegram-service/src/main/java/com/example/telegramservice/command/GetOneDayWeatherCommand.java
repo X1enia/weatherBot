@@ -1,7 +1,8 @@
 package com.example.telegramservice.command;
 
-import com.example.kafkacommon.dto.ForecastType;
-import com.example.kafkacommon.dto.GetWeatherDto;
+import com.example.kafkacommon.dto.weather.ForecastType;
+import com.example.kafkacommon.dto.weather.GetWeatherDto;
+import com.example.telegramservice.SubscribeService;
 import com.example.telegramservice.kafka.TelegramProducer;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
@@ -9,12 +10,14 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Component
-public class GetOneDayWeatherCommand implements ICommand {
+public class GetOneDayWeatherCommand implements ICommand { //todo сделать inline отображение погоды
     private static final String TEXT_TRIGGER = "/weather";
-    private final TelegramProducer producer;
+    private final TelegramProducer producer; //todo как-то убрать продьюсер в сервис мб
+    private final SubscribeService service;
 
-    public GetOneDayWeatherCommand(TelegramProducer producer) {
+    public GetOneDayWeatherCommand(TelegramProducer producer, SubscribeService service) {
         this.producer = producer;
+        this.service = service;
     }
 
     @Override
@@ -35,6 +38,7 @@ public class GetOneDayWeatherCommand implements ICommand {
             dto.setCityName(cityName);
             dto.setForecastType(ForecastType.DAY);
             producer.sendMessage(dto);
+            service.createUser(message.getFrom());
             return builder.text(String.format("Смотрю для тебя погоду в %s", cityName))
                     .build();
         } catch (ArrayIndexOutOfBoundsException e) {

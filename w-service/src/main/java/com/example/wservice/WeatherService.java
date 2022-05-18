@@ -1,9 +1,9 @@
 package com.example.wservice;
 
-import com.example.kafkacommon.dto.ForecastFiveDaysDto;
-import com.example.kafkacommon.dto.GetWeatherDto;
-import com.example.kafkacommon.dto.ResponseWeatherDto;
-import com.example.kafkacommon.dto.WeatherDto;
+import com.example.kafkacommon.dto.weather.ForecastFiveDaysDto;
+import com.example.kafkacommon.dto.weather.GetWeatherDto;
+import com.example.kafkacommon.dto.weather.ResponseWeatherDto;
+import com.example.kafkacommon.dto.weather.WeatherDto;
 import com.example.wservice.kafka.WeatherProducer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;

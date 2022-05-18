@@ -1,6 +1,6 @@
 package com.example.wservice;
 
-import com.example.kafkacommon.dto.GetWeatherDto;
+import com.example.kafkacommon.dto.weather.GetWeatherDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

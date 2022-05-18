@@ -2,28 +2,25 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
-      group-id: telegram-group
+      group-id: subscribe-group
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
       properties:
         spring.json.trusted.packages: "*"
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
-      #        spring.json.value.default.type: >-
-      #          GET_WEATHER:com.example.kafkacommon.dto.weather.GetWeatherDto
       auto-offset-reset: latest
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
         spring.json.add.type.headers: true
-    #        spring.json.value.default.type: >-
-    #          SEND_WEATHER:com.example.kafka-common.dto.ResponseWeatherDto
     topic:
       weather: weather.service
       telegram: telegram.service
       subscribe: subscribe.service
-telegram-config:
-  token: ${API_TELEGRAM_TOKEN}
-  url: ${URL:https://aec4-37-112-66-58.eu.ngrok.io}
-  name: weather
-  path: pathWeather
+  data:
+    mongodb:
+      username: ${DB_USER}
+      password: ${DB_PASSWORD}
+      authentication-database: ${DB_AUTH:admin}
+      database: ${DB_NAME:subscribe-service}

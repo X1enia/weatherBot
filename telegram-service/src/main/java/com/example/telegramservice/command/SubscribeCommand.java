@@ -1,9 +1,6 @@
 package com.example.telegramservice.command;
 
-import com.example.kafkacommon.dto.weather.ForecastType;
-import com.example.kafkacommon.dto.weather.GetWeatherDto;
 import com.example.telegramservice.SubscribeService;
-import com.example.telegramservice.kafka.TelegramProducer;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
@@ -11,13 +8,11 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Component
-public class GetFiveDayWeatherCommand implements ICommand {
-    private static final String TEXT_TRIGGER = "/weather5";
-    private final TelegramProducer producer;
+public class SubscribeCommand implements ICommand { //todo сделать inline подписку
+    private static final String TEXT_TRIGGER = "/subscribe";
     private final SubscribeService service;
 
-    public GetFiveDayWeatherCommand(TelegramProducer producer, SubscribeService service) {
-        this.producer = producer;
+    public SubscribeCommand(SubscribeService service) {
         this.service = service;
     }
 
@@ -34,16 +29,16 @@ public class GetFiveDayWeatherCommand implements ICommand {
         builder.chatId(userId.toString()).parseMode(ParseMode.HTML);
         try {
             String cityName = split[1].split(" ")[1];
-            GetWeatherDto dto = new GetWeatherDto();
-            dto.setTelegramId(userId.toString());
-            dto.setCityName(cityName);
-            dto.setForecastType(ForecastType.FIVE_DAYS);
-            producer.sendMessage(dto);
-            service.createUser(message.getFrom());
-            return builder.text(String.format("Смотрю для тебя погоду в %s", cityName))
+            int period = Integer.parseInt(split[1].split(" ")[2]);
+            if (period < 3 || period > 24) {
+                return builder.text("Укажи период от 3 до 24 (значение должно быть целым)")
+                        .build();
+            }
+            service.subscribe(message.getFrom(), cityName, period);
+            return builder.text(String.format("Я сейчас узнаю есть ли карточки на подписку по городу %s каждые %s часа(ов)", cityName, period))
                     .build();
         } catch (ArrayIndexOutOfBoundsException e) {
-            return builder.text("Введи название города \uD83E\uDD19") //todo добавить локализацию
+            return builder.text("Введи название города и период (от 3 и до 24 часов) с каким нужно отправлять сообщения \uD83E\uDD19 \nПример: /subscribe Тверь 5") //todo добавить локализацию
                     .build();
         }
     }

@@ -1,6 +1,6 @@
 package com.example.wservice.kafka;
 
-import com.example.kafkacommon.dto.GetWeatherDto;
+import com.example.kafkacommon.dto.weather.GetWeatherDto;
 import com.example.wservice.WeatherService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaHandler;
@@ -11,7 +11,7 @@ import java.net.MalformedURLException;
 
 @Slf4j
 @Component
-@KafkaListener(topics = "telegram.service")
+@KafkaListener(topics = {"telegram.service", "subscribe.service"})
 public class WeatherConsumer {
     private final WeatherService service;
 

@@ -1,4 +1,4 @@
-package com.example.kafkacommon.dto;
+package com.example.kafkacommon.dto.weather;
 
 public enum ForecastType {
     DAY,

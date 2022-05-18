@@ -1,5 +1,6 @@
-package com.example.kafkacommon.dto;
+package com.example.kafkacommon.dto.weather;
 
+import com.example.kafkacommon.dto.AbstractDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
