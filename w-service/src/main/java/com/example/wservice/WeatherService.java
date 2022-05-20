@@ -104,9 +104,9 @@ public class WeatherService {
         } else {
             LocalDateTime date = convertMsToDate(dto.getDt());
             String monthName = RESOURCE_BUNDLE.getString(date.getMonth().toString());
-            textDate = String.format(RESOURCE_BUNDLE.getString("app.weather.format"), date.getDayOfMonth(), monthName, date.getYear()); //todo перевод названий месяцев
+            textDate = String.format(RESOURCE_BUNDLE.getString("app.weather.format"), date.getDayOfMonth(), monthName, date.getYear()); //
         }
-        String result = String.format(RESOURCE_BUNDLE.getString("app.weather.5days"), textDate, cityName); //TODO докрутить красивое описание погоды
+        String result = String.format(RESOURCE_BUNDLE.getString("app.weather.5days"), textDate, cityName); //
         result += "\n";
         result += String.format(RESOURCE_BUNDLE.getString("app.weather.getMain.format"),
                 getWeatherDescription(dto.getWeather().get(0).getDescription()),

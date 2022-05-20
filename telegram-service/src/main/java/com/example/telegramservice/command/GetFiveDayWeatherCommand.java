@@ -10,11 +10,15 @@ import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 @Component
 public class GetFiveDayWeatherCommand implements ICommand {
     private static final String TEXT_TRIGGER = "/weather5";
     private final TelegramProducer producer;
     private final SubscribeService service;
+    private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("messages", Locale.getDefault());
 
     public GetFiveDayWeatherCommand(TelegramProducer producer, SubscribeService service) {
         this.producer = producer;
@@ -40,10 +44,14 @@ public class GetFiveDayWeatherCommand implements ICommand {
             dto.setForecastType(ForecastType.FIVE_DAYS);
             producer.sendMessage(dto);
             service.createUser(message.getFrom());
-            return builder.text(String.format("Смотрю для тебя погоду в %s", cityName))
+            return SendMessage.builder()
+                    .chatId(String.valueOf(userId))
+                    .text(String.format(RESOURCE_BUNDLE.getString("app.weatherFiveDays"), cityName))
                     .build();
         } catch (ArrayIndexOutOfBoundsException e) {
-            return builder.text("Введи название города \uD83E\uDD19") //todo добавить локализацию
+            return SendMessage.builder()
+                    .chatId(String.valueOf(userId))
+                    .text(String.format(RESOURCE_BUNDLE.getString("app.textFiveDays")))
                     .build();
         }
     }

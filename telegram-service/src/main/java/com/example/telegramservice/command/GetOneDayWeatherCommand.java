@@ -5,15 +5,21 @@ import com.example.kafkacommon.dto.weather.GetWeatherDto;
 import com.example.telegramservice.SubscribeService;
 import com.example.telegramservice.kafka.TelegramProducer;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 @Component
 public class GetOneDayWeatherCommand implements ICommand { //todo сделать inline отображение погоды
     private static final String TEXT_TRIGGER = "/weather";
     private final TelegramProducer producer; //todo как-то убрать продьюсер в сервис мб
     private final SubscribeService service;
+    private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("messages", Locale.getDefault());
+
 
     public GetOneDayWeatherCommand(TelegramProducer producer, SubscribeService service) {
         this.producer = producer;
@@ -26,7 +32,7 @@ public class GetOneDayWeatherCommand implements ICommand { //todo сделать
     }
 
     @Override
-    public SendMessage execute(Message message) {
+    public BotApiMethod<Message> execute(Message message) {
         Long userId = message.getFrom().getId();
         String[] split = message.getText().split(TEXT_TRIGGER);
         SendMessage.SendMessageBuilder builder = SendMessage.builder();
@@ -39,10 +45,14 @@ public class GetOneDayWeatherCommand implements ICommand { //todo сделать
             dto.setForecastType(ForecastType.DAY);
             producer.sendMessage(dto);
             service.createUser(message.getFrom());
-            return builder.text(String.format("Смотрю для тебя погоду в %s", cityName))
+            return SendMessage.builder()
+                    .chatId(String.valueOf(userId))
+                    .text(String.format(RESOURCE_BUNDLE.getString("app.weatherOneDay"), cityName))
                     .build();
         } catch (ArrayIndexOutOfBoundsException e) {
-            return builder.text("Введи название города \uD83E\uDD19") //todo добавить локализацию
+            return SendMessage.builder()
+                    .chatId(String.valueOf(userId))
+                    .text(String.format(RESOURCE_BUNDLE.getString("app.textOneDay")))
                     .build();
         }
     }

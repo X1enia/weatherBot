@@ -55,7 +55,7 @@ public class SubscribeScheduler {
         }
 
         dtoReadyToSend.forEach(producer::sendMessage); //TODO в версии 2.0 сделать общую DTO для отправки всех запросов по всем пользователям
-        //TODO кэширование прогноза погоды в версии 3.0 во избежание ограничений бесплатного API opeanweather
+        //TODO кэширование прогноза погоды в версии 3.0 во избежание ограничений бесплатного API openweather
     }
 
     private void updateSubscriptions(List<Subscribe> subscribeReadyToConvert) {

@@ -7,10 +7,14 @@ import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 @Component
 public class UnSubscribeCommand implements ICommand {
     private static final String TEXT_TRIGGER = "/unsub";
     private final SubscribeService service;
+    private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("messages", Locale.getDefault());
 
     public UnSubscribeCommand(SubscribeService service) {
         this.service = service;
@@ -30,10 +34,15 @@ public class UnSubscribeCommand implements ICommand {
         try {
             String cityName = split[1].split(" ")[1];
             service.unSubscribe(userId, cityName);
-            return builder.text(String.format("Карточка сильно мятая, но я попробую отписать тебя от прогноза погоды по городу %s", cityName))
-                    .build();
+           return SendMessage.builder()
+                   .chatId(userId)
+                   .text(String.format(RESOURCE_BUNDLE.getString("app.unsub"), cityName))
+                   .build();
+
         } catch (ArrayIndexOutOfBoundsException e) {
-            return builder.text("Введи название города от которого хочешь отписаться \uD83E\uDD19 \nПример: /unsub Москва") //todo добавить локализацию
+            return SendMessage.builder()
+                    .chatId(userId)
+                    .text(String.format(RESOURCE_BUNDLE.getString("app.unsubCity")))
                     .build();
         }
     }

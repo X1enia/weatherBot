@@ -6,10 +6,14 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 @Component
 public class SubscribeListCommand implements ICommand {
     private static final String TEXT_TRIGGER = "/my_subs";
     private final SubscribeService service;
+    private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("messages", Locale.getDefault());
 
     public SubscribeListCommand(SubscribeService service) {
         this.service = service;
@@ -26,7 +30,7 @@ public class SubscribeListCommand implements ICommand {
         service.subscribeList(userId);
         return SendMessage.builder()
                 .chatId(userId)
-                .text("Пошел смотреть коллекцию твоих подписок, один момент!")
+                .text(String.format(RESOURCE_BUNDLE.getString("app.allSubs")))
                 .build();
     }
 }

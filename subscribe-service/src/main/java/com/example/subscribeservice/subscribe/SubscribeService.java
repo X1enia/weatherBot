@@ -78,7 +78,7 @@ public class SubscribeService {
                 String cityName = message.getCityName();
                 if (subscribeExist(telegramId, cityName)) {
                     send.setEvent(SubscribeEvent.ERROR);
-                    send.setErrorMessage(String.format("Ты уже взял карточку на погоду в городе %s", cityName));
+                    send.setErrorMessage(String.format("Ты уже подписался на погоду в городе %s", cityName));
                 } else {
                     Subscribe subscribe = subscribeConverter.convert(message);
                     mongoTemplate.save(subscribe);
