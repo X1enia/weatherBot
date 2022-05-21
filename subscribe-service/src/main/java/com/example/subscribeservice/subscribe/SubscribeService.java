@@ -116,7 +116,7 @@ public class SubscribeService {
         if (subscribe == null) {
             log.error(String.format("Subscribe for user telegram id: %s and city %s not found!", telegramId, cityName));
             send.setEvent(SubscribeEvent.ERROR);
-            send.setErrorMessage(String.format("Ты не подписывался на прогноз в г. %s", cityName));
+            send.setErrorMessage(String.format("Ты не подписывался на прогноз в городе %s", cityName));
         } else {
             subscribe.setIsActive(false);
             mongoTemplate.save(subscribe);

@@ -48,7 +48,7 @@ public class TelegramConsumer {
         StringBuilder sb = new StringBuilder();
         switch (event) {
             case SUBSCRIBED: {
-                sb.append("Карточка на прогноз в г. ");
+                sb.append("Подписка на прогноз в городе ");
                 sb.append(message.getCityName());
                 sb.append(" прошла успешна, частота уведомлений: ");
                 sb.append(message.getPeriod());
