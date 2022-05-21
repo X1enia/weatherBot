@@ -24,6 +24,6 @@ spring:
       subscribe: subscribe.service
 telegram-config:
   token: ${API_TELEGRAM_TOKEN}
-  url: ${URL:https://de88-37-112-66-58.eu.ngrok.io}
+  url: ${URL:https://9d52-37-112-66-58.eu.ngrok.io}
   name: weather
   path: pathWeather

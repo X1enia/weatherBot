@@ -24,5 +24,5 @@ spring:
 weather:
   config:
     token: ${API_TOKEN:c805ecd060a2be9805f613473812ea6d}
-    urlOneDay: ${API_DAY_URL:https://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s&units=metric&lang=ru}
-    urlFiveDay: ${API_FIVE_URL:https://api.openweathermap.org/data/2.5/forecast?q=%s&appid=%s&units=metric&lang=ru}
+    urlOneDay: ${API_DAY_URL:http://188.166.16.132/data/2.5/weather?q=%s&appid=%s&units=metric&lang=ru}
+    urlFiveDay: ${API_FIVE_URL:http://188.166.16.132/data/2.5/forecast?q=%s&appid=%s&units=metric&lang=ru}

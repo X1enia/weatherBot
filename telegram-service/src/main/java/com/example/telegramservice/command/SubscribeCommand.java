@@ -42,7 +42,7 @@ public class SubscribeCommand implements ICommand { //todo сделать inline
             service.subscribe(message.getFrom(), cityName, period);
             return SendMessage.builder()
                     .chatId(String.valueOf(userId))
-                    .text(String.format(RESOURCE_BUNDLE.getString("app.subCity"), cityName, period))
+                    .text(String.format(RESOURCE_BUNDLE.getString("app.subCity"), cityName))
                     .build();
         } catch (ArrayIndexOutOfBoundsException e) {
             return SendMessage.builder()

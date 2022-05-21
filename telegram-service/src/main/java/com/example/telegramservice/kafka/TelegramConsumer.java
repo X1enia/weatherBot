@@ -2,6 +2,7 @@ package com.example.telegramservice.kafka;
 
 import com.example.kafkacommon.dto.subscribe.SubscribeCitiesDto;
 import com.example.kafkacommon.dto.subscribe.SubscribeDto;
+import com.example.kafkacommon.dto.subscribe.SubscribeEvent;
 import com.example.kafkacommon.dto.weather.ResponseWeatherDto;
 import com.example.telegramservice.TelegramBotService;
 import lombok.extern.slf4j.Slf4j;
@@ -40,9 +41,12 @@ public class TelegramConsumer {
     @KafkaHandler
     public void subscribeListener(SubscribeDto message) {
         Assert.notNull(message, "Message must be not null!");
+        SubscribeEvent event = message.getEvent();
+        Assert.notNull(event, "Event is null");
+
         String telegramId = message.getTelegramId();
         StringBuilder sb = new StringBuilder();
-        switch (message.getEvent()) {
+        switch (event) {
             case SUBSCRIBED: {
                 sb.append("Карточка на прогноз в г. ");
                 sb.append(message.getCityName());

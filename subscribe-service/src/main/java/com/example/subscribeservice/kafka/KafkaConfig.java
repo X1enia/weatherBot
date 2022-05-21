@@ -11,7 +11,7 @@ import org.springframework.kafka.config.TopicBuilder;
 @Configuration
 public class KafkaConfig {
     @Bean
-    public NewTopic telegramTopic(@Value("${spring.kafka.topic.subscribe}") String topic) {
+    public NewTopic subscribeTopic(@Value("${spring.kafka.topic.subscribe}") String topic) {
         return TopicBuilder.name(topic)
                 .partitions(1)
                 .replicas(1)

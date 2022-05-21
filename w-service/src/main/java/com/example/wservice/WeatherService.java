@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Instant;
@@ -52,6 +53,13 @@ public class WeatherService {
                     .errorCode(0)
                     .body(dto)
                     .build();
+        } catch (ConnectException e) {
+            ResponseWeatherDto errorResponse = getErrorResponse(message);
+            producer.sendMessage(errorResponse);
+            return ForecastResponse.builder()
+                    .errorCode(2)
+                    .body(e.getMessage())
+                    .build();
         } catch (IOException e) {
             e.printStackTrace();
             return ForecastResponse.builder()
@@ -82,11 +90,18 @@ public class WeatherService {
                     }
                 }
             }
-             response.setUserId(message.getTelegramId());
+            response.setUserId(message.getTelegramId());
             producer.sendMessage(response);
             return ForecastResponse.builder()
                     .errorCode(0)
                     .body(dto)
+                    .build();
+        } catch (ConnectException e) {
+            ResponseWeatherDto errorResponse = getErrorResponse(message);
+            producer.sendMessage(errorResponse);
+            return ForecastResponse.builder()
+                    .errorCode(2)
+                    .body(e.getMessage())
                     .build();
         } catch (IOException e) {
             e.printStackTrace();
@@ -95,6 +110,13 @@ public class WeatherService {
                     .body(e.getMessage())
                     .build();
         }
+    }
+
+    private ResponseWeatherDto getErrorResponse(GetWeatherDto message) {
+        ResponseWeatherDto errorResponse = new ResponseWeatherDto();
+        errorResponse.setUserId(message.getTelegramId());
+        errorResponse.setMessage("Произошла ошибка соединения с сервисом погоды, попробуйте позднее, спасибо!");
+        return errorResponse;
     }
 
     private String convertWeatherToString(WeatherDto dto, String cityName) {
@@ -134,6 +156,6 @@ public class WeatherService {
     }
 
     private String getWeatherDescription(String description) {
-        return description.substring(0,1).toUpperCase(Locale.ROOT) + description.substring(1);
+        return description.substring(0, 1).toUpperCase(Locale.ROOT) + description.substring(1);
     }
 }

@@ -21,7 +21,6 @@ public class HelpCommand implements ICommand{
     @Override
     public BotApiMethod<Message> execute(Message message) {
         String userId = message.getFrom().getId().toString();
-        StringBuilder sb = new StringBuilder();
         return SendMessage.builder()
                 .chatId(userId)
                 .text(String.format(RESOURCE_BUNDLE.getString("app.help")))
